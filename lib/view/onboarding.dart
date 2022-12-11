@@ -1,7 +1,7 @@
 // import 'package:figma/shared_pref.dart';
 import 'package:flutter/material.dart';
-import 'package:ramene/view/login.dart';
-import 'package:ramene/view/register.dart';
+import 'package:uas/view/login.dart';
+import 'package:uas/view/register.dart';
 // import 'package:figma/main.dart';
 
 // Future<void> main() async {

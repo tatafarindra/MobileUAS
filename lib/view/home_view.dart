@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ramene/model/music.dart';
+import 'package:uas/model/music.dart';
 
 
 import '../service/music_service.dart';

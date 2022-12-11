@@ -1,7 +1,7 @@
 // 1. install package dio terlebih dahulu, dan import ke sini
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:ramene/model/music.dart';
+import 'package:uas/model/music.dart';
 
 // 2. menggunakan asyncronous untuk ambil data api
 class MusicService {

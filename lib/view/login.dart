@@ -1,5 +1,5 @@
-import 'package:ramene/view/home_view.dart';
-import 'package:ramene/view/register.dart';
+import 'package:uas/view/home_view.dart';
+import 'package:uas/view/register.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:ramene/constants.dart';
