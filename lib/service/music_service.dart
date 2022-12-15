@@ -9,7 +9,7 @@ class MusicService {
     Dio dio = Dio();
 
     var response = await dio.get(
-        'http://localhost:3000/album');
+        'http://192.168.1.69:3000/album');
 
     List<Music> music=
     (response.data as List).map((v) => Music.fromJson(v)).toList();

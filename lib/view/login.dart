@@ -1,17 +1,29 @@
 import 'package:uas/view/home_view.dart';
 import 'package:uas/view/register.dart';
+import 'package:uas/view/navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:ramene/constants.dart';
 // import 'package:ramene/shared_pref.dart';
 import 'package:dio/dio.dart';
+import 'package:uas/view/shared_preferences.dart';
 
 class Login extends StatefulWidget {
+  Function setTheme;
+  Login({Key? key, required this.setTheme}) : super(key: key);
   @override
   State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
+  ThemeData themeData = ThemeData.light();
+
+  void setTheme(bool isDarkMode) {
+    setState(() {
+      themeData = (isDarkMode) ? ThemeData.dark() : ThemeData.light();
+      SharedPref.pref?.setBool('isDarkMode', isDarkMode);
+    });
+  }
 
 
   TextEditingController controllerEmail = TextEditingController();
@@ -20,7 +32,7 @@ class _LoginState extends State<Login> {
   void login(String email, password) async {
     try {
       // ME-GET atau Mengambil data json dari link
-      var response = await Dio().get('http://localhost:3000/user');
+      var response = await Dio().get('http://192.168.1.69:3000/user');
       // inisialisasi panjang data
       var panjang_data = response.data.length;
       if (response.statusCode == 200) {
@@ -31,7 +43,7 @@ class _LoginState extends State<Login> {
               password == response.data[i]['password']) {
             print("Anda Berhasil Masuk");
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Home()));
+                context, MaterialPageRoute(builder: (context) => Navbar(str: '',)));
             break;
           }
         }
@@ -40,10 +52,10 @@ class _LoginState extends State<Login> {
           backgroundColor: Colors.redAccent,
           content: Text(
             'Login failed',
-            style: TextStyle(
-              fontFamily: 'Poppins-Regular',
-              color: Colors.white,
-            ),
+            // style: TextStyle(
+            //   fontFamily: 'Poppins-Regular',
+            //   color: Colors.white,
+            // ),
           ),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -52,11 +64,11 @@ class _LoginState extends State<Login> {
       final snackBar = SnackBar(
         backgroundColor: Colors.redAccent,
         content: Text(
-          e.toString(),
-          style: TextStyle(
-            fontFamily: 'Poppins-Regular',
-            color: Colors.white,
-          ),
+          'Login failed',
+          // style: TextStyle(
+          //   fontFamily: 'Poppins-Regular',
+          //   color: Colors.white,
+          // ),
         ),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -85,34 +97,40 @@ class _LoginState extends State<Login> {
               alignment: Alignment.topCenter,
               child: Column(
                 children: <Widget>[
-                  Text(
-                    "Halo pecinta musik!",
-                    style: TextStyle(
-                      color: Colors.black,
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+                    child: Text(
+                      "Halo pecinta musik!",
+                      style: TextStyle(
+                        color: Colors.black,
 
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ),
-                  SizedBox(height: 3),
-
-                  Text(
-                    "Dengarkan musik kesukaanmu di sini!",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
                     ),
                   ),
                   SizedBox(height: 3),
                   Container(
+                    margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    child: Text(
+                      "Dengarkan musik kesukaanmu di sini!",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 3),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(20, 50, 20, 0),
                     alignment: Alignment.center,
 
                     // color: Colors.white,
                     child: Image.asset(
                       'lib/images/43117.jpg',
-                      height: 100,
-                      width: 200,
+                      height: 150,
+                      width: 300,
                     ),
                   ),
 
@@ -210,7 +228,7 @@ class _LoginState extends State<Login> {
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => Register(),
+                      builder: (context) => Register(setTheme: setTheme),
                     ));
                   },
                   child: Text("Daftar",

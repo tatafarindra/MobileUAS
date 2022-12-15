@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 import 'data.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false
-    );
-  }
-}
+// void main() => runApp(MyApp());
+//
+// class MyApp extends StatefulWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false
+//     );
+//   }
+// }
 
 class search extends StatefulWidget {
   @override

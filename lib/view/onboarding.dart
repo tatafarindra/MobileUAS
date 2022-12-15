@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:uas/view/login.dart';
 import 'package:uas/view/register.dart';
+import 'package:uas/view/shared_preferences.dart';
 // import 'package:figma/main.dart';
 
 // Future<void> main() async {
@@ -35,6 +36,14 @@ class onboarding extends StatefulWidget {
 }
 
 class _onboardingState extends State<onboarding> {
+  ThemeData themeData = ThemeData.light();
+
+  void setTheme(bool isDarkMode) {
+    setState(() {
+      themeData = (isDarkMode) ? ThemeData.dark() : ThemeData.light();
+      SharedPref.pref?.setBool('isDarkMode', isDarkMode);
+    });
+  }
 
 
 // class _MyHomePageState extends State<MyHomePage> {
@@ -60,7 +69,7 @@ class _onboardingState extends State<onboarding> {
         children: [
           Container(
             // color: Colors.white,
-            margin: EdgeInsets.all(20),
+            margin: const EdgeInsets.fromLTRB(20, 150, 20, 0),
             child: const Text(
               'OUR MUSIC',
               style: TextStyle(
@@ -70,6 +79,7 @@ class _onboardingState extends State<onboarding> {
             ),
           ),
           Container(
+            margin: const EdgeInsets.fromLTRB(20, 100, 20, 0),
             alignment: Alignment.center,
 
             // color: Colors.white,
@@ -91,7 +101,7 @@ class _onboardingState extends State<onboarding> {
           Container(
             // color: Colors.white,
             // width: 300,
-            margin: EdgeInsets.all(20),
+            margin: const EdgeInsets.fromLTRB(20, 50, 20, 0),
             child: Text(
               'Music is our life',
               style: TextStyle(
@@ -100,7 +110,7 @@ class _onboardingState extends State<onboarding> {
             ),
           ),
           Container(
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.fromLTRB(40, 70, 40, 0),
             width: 400,
             height: 50,
             child: TextButton(
@@ -114,10 +124,10 @@ class _onboardingState extends State<onboarding> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Register()));
+                        builder: (context) => Register(setTheme: setTheme)));
               },
               child: Text(
-                "Sign In",
+                "Sign Up",
                 style: TextStyle(
                   color: Color(0xffffffff),
                   fontSize: 20,
@@ -126,7 +136,7 @@ class _onboardingState extends State<onboarding> {
             ),
           ),
           Container(
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.fromLTRB(40, 10, 40, 0),
             width: 400,
             height: 50,
             child: TextButton(
@@ -140,7 +150,7 @@ class _onboardingState extends State<onboarding> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Login()));
+                        builder: (context) => Login(setTheme: setTheme)));
               },
               child: Text(
                 "Log In",

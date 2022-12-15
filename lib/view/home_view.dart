@@ -1,11 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:uas/model/music.dart';
+import 'package:uas/view/shared_preferences.dart';
 
 
 import '../service/music_service.dart';
+import 'package:uas/view/detailAlbum.dart';
 
+
+Future<void> main() async {
+  /* WidgetFlutterBinding digunakan untuk berinteraksi dengan mesin Flutter.
+  SharedPref.init() perlu memanggil kode asli untuk menginisialisasi, oleh karena itu
+  perlu memanggil ensureInitialized() untuk memastikan terdapat instance yang bisa dijalankan */
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedPref.init();
+
+  // runApp(const MyApp());
+}
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  Function setTheme;
+  Home({Key? key, required this.setTheme, required String str}) : super(key: key);
+  // const Home({Key? key, required String str}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -13,51 +28,36 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   @override
-  int _selectedNavbar = 0;
-
-  void _changeSelectedNavBar(int index) {
-    setState(() {
-      _selectedNavbar = index;
-    });
-  }
+  // ThemeData themeData = ThemeData.light();
+  bool isDarkMode = SharedPref.pref?.getBool('isDarkMode') ?? false;
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: Container(
+          margin: const EdgeInsets.fromLTRB(110, 0, 110, 0),
+          child: Text(
+            "Home",
+          ),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.dark_mode),
+            onPressed: () {
+              isDarkMode = !isDarkMode;
+              widget.setTheme(isDarkMode);
+            },
+
+          ),
+        ],
 
         backgroundColor: Color.fromARGB(225,192,106,1),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Color.fromARGB(225,192,106,1),
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.white,
-        onTap: _changeSelectedNavBar,
-        showUnselectedLabels: true,
-        selectedFontSize: 14,
-        unselectedFontSize: 14,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.playlist_add),
-            label: 'Playlist',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
+
       body: FutureBuilder<List<Music>>(
+
           future: MusicService.getDataMusic(),
+
           builder: (context, snapshot) {
             //loading
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -80,7 +80,18 @@ class _HomeState extends State<Home> {
                         mainAxisSpacing: 16,
                       ),
                       itemBuilder: (context, index) {
-                        return Stack(
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        DetailAlbum(
+                                          music:
+                                          snapshot.data![index],
+                                        )));
+                          },
+                        child: Stack(
                           children: [
                             Container(
                               width: double.infinity,
@@ -90,6 +101,7 @@ class _HomeState extends State<Home> {
                                 fit: BoxFit.cover,
                               ),
                             ),
+
                             Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -112,9 +124,9 @@ class _HomeState extends State<Home> {
                                     "${snapshot.data![index].penyanyi}",
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w200,
-                                      fontSize: 10
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w200,
+                                        fontSize: 10
                                     ),
                                   ),
                                 ),
@@ -125,17 +137,22 @@ class _HomeState extends State<Home> {
                                     "${snapshot.data![index].tahun}",
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 10
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 10
                                     ),
                                   ),
                                 ),
+
                               ],
+
                             ),
-                              ],
+
+                          ],
+                        ),
                         );
-                          }),
+
+                      }),
                 );
               }
 
@@ -143,7 +160,19 @@ class _HomeState extends State<Home> {
 
           }
 
-          ),
+      ),
+      //       itemBuilder: (context, index) {
+      // return GestureDetector(
+      // onTap: () {
+      // Navigator.push(
+      // context,
+      // MaterialPageRoute(
+      // builder: (context) =>
+      // DetailAlbum(
+      // music:
+      // snapshot.data![index],
+      // )));
+      // },
     );
 
   }
